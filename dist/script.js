@@ -141,8 +141,13 @@ const forms = state => {
         statusMessage.textContent = message.success;
       }).catch(() => statusMessage.textContent = message.failure).finally(() => {
         clearInputs();
+        Object.keys(state).forEach(key => delete state[key]);
         setTimeout(() => {
           statusMessage.remove();
+          document.querySelectorAll('[data-modal]').forEach(item => {
+            item.style.display = 'none';
+          });
+          document.body.style.overflow = '';
         }, 5000);
       });
     });
@@ -165,12 +170,23 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 
 
-const modals = () => {
+const modals = state => {
   function bindModal(triggerSelector, modalSelector, closeSelector, closeClickOverlay = true) {
     const trigger = document.querySelectorAll(triggerSelector),
       modal = document.querySelector(modalSelector),
       close = document.querySelector(closeSelector),
-      windows = document.querySelectorAll('[data-modal]');
+      windows = document.querySelectorAll('[data-modal]'),
+      requiredInputsMessage = document.querySelectorAll('.required-inputs__message');
+    const statusMessage = document.createElement('div');
+    statusMessage.classList.add('status');
+    statusMessage.textContent = 'Необходимо заполнить все поля!';
+    function handlePopupInputs(popupSelector, i) {
+      document.querySelector(popupSelector).style.display = 'block';
+      document.body.style.overflow = 'hidden';
+      if (!requiredInputsMessage[i].querySelector('.status')) {
+        requiredInputsMessage[i].append(statusMessage);
+      }
+    }
     trigger.forEach(item => {
       item.addEventListener('click', e => {
         if (e.target) {
@@ -179,9 +195,16 @@ const modals = () => {
         windows.forEach(item => {
           item.style.display = 'none';
         });
-        modal.style.display = 'block';
-        document.body.style.overflow = 'hidden';
-        // document.body.classList.add('modal-open');
+        if (item.classList.contains('popup_calc_button') && Object.keys(state).length < 3) {
+          handlePopupInputs('.popup_calc', 0);
+        } else if (item.classList.contains('popup_calc_profile_button') && Object.keys(state).length < 5) {
+          handlePopupInputs('.popup_calc_profile', 1);
+        } else {
+          modal.style.display = 'block';
+          document.body.style.overflow = 'hidden';
+          statusMessage.remove();
+        }
+        document.body.classList.add('modal-open');
       });
     });
     close.addEventListener('click', () => {
@@ -14192,7 +14215,7 @@ __webpack_require__.r(__webpack_exports__);
 window.addEventListener('DOMContentLoaded', () => {
   let modalState = {};
   (0,_modules_changeModalState__WEBPACK_IMPORTED_MODULE_4__["default"])(modalState);
-  (0,_modules_modals__WEBPACK_IMPORTED_MODULE_1__["default"])();
+  (0,_modules_modals__WEBPACK_IMPORTED_MODULE_1__["default"])(modalState);
   (0,_modules_tabs__WEBPACK_IMPORTED_MODULE_2__["default"])('.glazing_slider', '.glazing_block', '.glazing_content', 'active');
   (0,_modules_tabs__WEBPACK_IMPORTED_MODULE_2__["default"])('.decoration_slider', '.no_click', '.decoration_content > div > div', 'after_click');
   (0,_modules_tabs__WEBPACK_IMPORTED_MODULE_2__["default"])('.balcon_icons', '.balcon_icons_img', '.big_img > img', 'do_image_more', 'inline-block');

@@ -53,8 +53,13 @@ const forms = (state) => {
 				.catch(() => statusMessage.textContent = message.failure)
 				.finally(() => {
 					clearInputs();
+					Object.keys(state).forEach(key => delete state[key]);
 					setTimeout(() => {
 						statusMessage.remove();
+						document.querySelectorAll('[data-modal]').forEach(item => {
+							item.style.display = 'none';
+						});
+						document.body.style.overflow = '';
 					}, 5000);
 				});
 		});
