@@ -39,7 +39,7 @@ const modals = (state) => {
 					document.body.style.overflow = 'hidden';
 					statusMessage.remove();
 				}
-				document.body.classList.add('modal-open');
+				// document.body.classList.add('modal-open');
 			});
 		})
 
