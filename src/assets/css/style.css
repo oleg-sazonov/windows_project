@@ -841,6 +841,13 @@ textarea:focus {
   background-color: rgba(0, 0, 0, 0.5);
 }
 
+.popup img {
+  max-width: 600px; 
+  width: 100%; 
+  max-height: 800px;
+  height: 100%;
+}
+
 .myimage {
   position: fixed;
   top: 0;
@@ -1312,6 +1319,11 @@ textarea:focus {
     display: block;
     margin-right: 0;
     margin-bottom: 2rem;
+  }
+
+  .popup img {
+    width: 75%; 
+    height: 75%;
   }
 }
 
@@ -1802,6 +1814,11 @@ textarea:focus {
 
   .popup_calc_profile_button {
     padding: 1rem 5rem;
+  }
+
+  .popup img {
+    width: 60%; 
+    height: 60%;
   }
 }
 
