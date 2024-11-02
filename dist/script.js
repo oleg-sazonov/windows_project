@@ -168,12 +168,15 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
+/* harmony import */ var _modals__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./modals */ "./src/js/modules/modals.js");
+
 
 
 const images = () => {
   const imgPopup = document.createElement('div'),
     worksSection = document.querySelector('.works'),
-    bigImage = document.createElement('img');
+    bigImage = document.createElement('img'),
+    scroll = (0,_modals__WEBPACK_IMPORTED_MODULE_0__.calcScroll)();
   imgPopup.classList.add('popup');
   worksSection.append(imgPopup);
   imgPopup.style.justifyContent = 'center';
@@ -187,12 +190,14 @@ const images = () => {
     if (target && target.classList.contains('preview')) {
       imgPopup.style.display = 'flex';
       document.body.style.overflow = 'hidden';
+      document.body.style.marginRight = `${scroll}px`;
       const path = target.parentNode.getAttribute('href');
       bigImage.setAttribute('src', path);
     }
     if (target && target.matches('div.popup')) {
       imgPopup.style.display = 'none';
       document.body.style.overflow = '';
+      document.body.style.marginRight = `0px`;
     }
   });
 };
@@ -209,17 +214,30 @@ const images = () => {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   calcScroll: () => (/* binding */ calcScroll),
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 
 
+function calcScroll() {
+  let div = document.createElement('div');
+  div.style.width = '50px';
+  div.style.height = '50px';
+  div.style.overflowY = 'scroll';
+  div.style.visibility = 'hidden';
+  document.body.append(div);
+  let scrollWidth = div.offsetWidth - div.clientWidth;
+  div.remove();
+  return scrollWidth;
+}
 const modals = state => {
   function bindModal(triggerSelector, modalSelector, closeSelector, closeClickOverlay = true) {
     const trigger = document.querySelectorAll(triggerSelector),
       modal = document.querySelector(modalSelector),
       close = document.querySelector(closeSelector),
       windows = document.querySelectorAll('[data-modal]'),
-      requiredInputsMessage = document.querySelectorAll('.required-inputs__message');
+      requiredInputsMessage = document.querySelectorAll('.required-inputs__message'),
+      scroll = calcScroll();
     const statusMessage = document.createElement('div');
     statusMessage.classList.add('status');
     statusMessage.textContent = 'Необходимо заполнить все поля!';
@@ -245,6 +263,7 @@ const modals = state => {
         } else {
           modal.style.display = 'block';
           document.body.style.overflow = 'hidden';
+          document.body.style.marginRight = `${scroll}px`;
           statusMessage.remove();
         }
         // document.body.classList.add('modal-open');
@@ -256,6 +275,7 @@ const modals = state => {
       });
       modal.style.display = 'none';
       document.body.style.overflow = '';
+      document.body.style.marginRight = `0px`;
       // document.body.classList.remove('modal-open');
     });
     modal.addEventListener('click', e => {
@@ -265,6 +285,7 @@ const modals = state => {
         });
         modal.style.display = 'none';
         document.body.style.overflow = '';
+        document.body.style.marginRight = `0px`;
         // document.body.classList.add('modal-open');
       }
     });
